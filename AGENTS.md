@@ -71,9 +71,9 @@ Do NOT modify these without explicit human approval:
 
 ## Current State 📍
 **Last Updated:** 2026-08-17
-**Working On:** Agent Documentation (Phase 4 of the vibe-coding-prompt-template workflow) — no application code written yet.
-**Recently Completed:** Technical Design Document approved (`TechDesign-Parking-Management-MVP.md`), all Open Questions from the PRD resolved.
-**Blocked By:** None — ready to begin Phase 0 (Project Setup) once this documentation is in place.
+**Working On:** Phase 0 — Project Setup. The local Supabase CLI, versioned initial migration, RLS baseline, Supabase browser/server clients and CI workflow are in place.
+**Recently Completed:** Initial schema prepared in `supabase/migrations/20260818000100_initial_schema.sql`; it has not yet been applied to the remote project.
+**Blocked By:** The Supabase CLI has not yet been authenticated and linked to the existing remote project. `SUPABASE_SERVICE_ROLE_KEY` is also empty in `.env.local`; keep it server-only when supplied.
 
 ## Roadmap 🗺️
 *(Numbered phases below map directly to the Implementation Plan, section 22 of `TechDesign-Parking-Management-MVP.md`.)*

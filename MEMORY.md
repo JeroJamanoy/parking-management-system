@@ -5,11 +5,12 @@ DO NOT delete historical context if it is still relevant. Compress older complet
 -->
 
 ## 🏗️ Active Phase & Goal
-**Current Task:** Agent Documentation (Phase 4 of the vibe-coding-prompt-template workflow) — instantiating `AGENTS.md` and `agent_docs/*` from the approved PRD and Technical Design.
+**Current Task:** Phase 0 — Project Setup.
 **Next Steps:**
-1. Confirm the Supabase project (dev/staging) exists before running the first migration.
-2. Begin Phase 0 — Project Setup: initialize the Next.js repo, create the Supabase project + CLI, define initial migrations, configure `.env.local` / `.env.example`, set up basic CI (lint + test + build on push to `main`).
-3. Begin Phase 1 — Auth & roles once Phase 0 is verified working.
+1. Complete `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` using the project's server-only secret, then authenticate and link the Supabase CLI before applying migrations.
+2. Apply `supabase/migrations/20260818000100_initial_schema.sql` through `npm run db:push`; never paste it manually into the production dashboard.
+3. Generate database TypeScript types after the remote migration is applied.
+4. Begin Phase 1 — Auth & roles once the remote schema and RLS policies are verified.
 
 ## 📂 Architectural Decisions
 *(Log specific choices made during the build here so future agents respect them. Carried over from the Technical Design — logged into this file on 2026-08-17.)*
@@ -19,6 +20,7 @@ DO NOT delete historical context if it is still relevant. Compress older complet
 - 2026-08-17 — **Rate freezing implemented as a duplicated snapshot** (`rate_snapshot_id` + `rate_snapshot_price`), not just a foreign key, so historical sessions are immune even to future changes in how `rates` is edited. (TechDesign §6.6.1)
 - 2026-08-17 — **Realtime limited to the spot grid and active-sessions list**; dashboard and history use plain refetch/polling — Realtime everywhere would add complexity with no perceptible benefit. (TechDesign §17)
 - 2026-08-17 — **Session cancellation** (`active → cancelled`) allowed for both Admin and Operator, but only if the session has no associated payment row; no path exists to cancel/void a `completed` session in the MVP. (TechDesign, Open Questions resolution)
+- 2026-08-18 — Phase 0 created the initial, versioned Supabase migration for all nine tables, their documented constraints and indexes, plus RLS. RLS role checks use narrowly scoped `SECURITY DEFINER` helpers in the private schema to avoid recursive policy lookups; no triggers were introduced.
 
 ## 🐛 Known Issues & Quirks
 *(Log current bugs or weird workarounds here)*
