@@ -5,12 +5,11 @@ DO NOT delete historical context if it is still relevant. Compress older complet
 -->
 
 ## 🏗️ Active Phase & Goal
-**Current Task:** Phase 0 — Project Setup.
+**Current Task:** Phase 1 — Auth & roles.
 **Next Steps:**
-1. Complete `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` using the project's server-only secret, then authenticate and link the Supabase CLI before applying migrations.
-2. Apply `supabase/migrations/20260818000100_initial_schema.sql` through `npm run db:push`; never paste it manually into the production dashboard.
-3. Generate database TypeScript types after the remote migration is applied.
-4. Begin Phase 1 — Auth & roles once the remote schema and RLS policies are verified.
+1. Manually verify login, logout and protected-route behaviour against the existing Supabase Admin profile.
+2. Add an Operator test account before implementing Admin-only operations in Phase 2/3.
+3. Implement Phase 2 — Parking configuration only after the Phase 1 manual verification passes.
 
 ## 📂 Architectural Decisions
 *(Log specific choices made during the build here so future agents respect them. Carried over from the Technical Design — logged into this file on 2026-08-17.)*
@@ -21,6 +20,7 @@ DO NOT delete historical context if it is still relevant. Compress older complet
 - 2026-08-17 — **Realtime limited to the spot grid and active-sessions list**; dashboard and history use plain refetch/polling — Realtime everywhere would add complexity with no perceptible benefit. (TechDesign §17)
 - 2026-08-17 — **Session cancellation** (`active → cancelled`) allowed for both Admin and Operator, but only if the session has no associated payment row; no path exists to cancel/void a `completed` session in the MVP. (TechDesign, Open Questions resolution)
 - 2026-08-18 — Phase 0 created the initial, versioned Supabase migration for all nine tables, their documented constraints and indexes, plus RLS. RLS role checks use narrowly scoped `SECURITY DEFINER` helpers in the private schema to avoid recursive policy lookups; no triggers were introduced.
+ 2026-08-18 — Phase 1 uses the authenticated user's cookie-backed Supabase session for login, profile lookup and RLS. The protected layout verifies JWT claims, then reads public.users; it rejects missing or inactive profiles. The service role client is intentionally deferred until an Admin-only user-management endpoint exists.
 
 ## 🐛 Known Issues & Quirks
 *(Log current bugs or weird workarounds here)*

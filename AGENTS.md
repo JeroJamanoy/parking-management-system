@@ -70,10 +70,10 @@ Do NOT modify these without explicit human approval:
 - **Concurrency discipline:** any new endpoint touching `parking_sessions` or `parking_spots` must be checked against the integrity rules in `agent_docs/code_patterns.md` before merging.
 
 ## Current State 📍
-**Last Updated:** 2026-08-17
-**Working On:** Phase 0 — Project Setup. The local Supabase CLI, versioned initial migration, RLS baseline, Supabase browser/server clients and CI workflow are in place.
-**Recently Completed:** Initial schema prepared in `supabase/migrations/20260818000100_initial_schema.sql`; it has not yet been applied to the remote project.
-**Blocked By:** The Supabase CLI has not yet been authenticated and linked to the existing remote project. `SUPABASE_SERVICE_ROLE_KEY` is also empty in `.env.local`; keep it server-only when supplied.
+**Last Updated:** 2026-08-18
+**Working On:** Phase 1 — Auth & roles. Login/logout, session refresh, protected layout and the pure authorization matrix are implemented locally.
+**Recently Completed:** Initial schema was applied to the remote Supabase project; an initial Admin Auth user and matching public.users profile exist.
+**Blocked By:** Manual verification of the real Admin login is still required. An Operator test account is needed to execute the role-denial checks.
 
 ## Roadmap 🗺️
 *(Numbered phases below map directly to the Implementation Plan, section 22 of `TechDesign-Parking-Management-MVP.md`.)*
