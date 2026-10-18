@@ -5,11 +5,11 @@ DO NOT delete historical context if it is still relevant. Compress older complet
 -->
 
 ## 🏗️ Active Phase & Goal
-**Current Task:** Phase 1 — Auth & roles.
+**Current Task:** Phase 2 — Parking configuration.
 **Next Steps:**
-1. Manually verify login, logout and protected-route behaviour against the existing Supabase Admin profile.
-2. Add an Operator test account before implementing Admin-only operations in Phase 2/3.
-3. Implement Phase 2 — Parking configuration only after the Phase 1 manual verification passes.
+1. Manually create the initial grid from `/spots` with the existing Admin account.
+2. Add an Operator test account and verify it can view the grid but receives `403` from `POST /api/parking-lot`.
+3. Implement Phase 3 — rates only after the configuration and role-denial checks pass.
 
 ## 📂 Architectural Decisions
 *(Log specific choices made during the build here so future agents respect them. Carried over from the Technical Design — logged into this file on 2026-08-17.)*
@@ -21,6 +21,7 @@ DO NOT delete historical context if it is still relevant. Compress older complet
 - 2026-08-17 — **Session cancellation** (`active → cancelled`) allowed for both Admin and Operator, but only if the session has no associated payment row; no path exists to cancel/void a `completed` session in the MVP. (TechDesign, Open Questions resolution)
 - 2026-08-18 — Phase 0 created the initial, versioned Supabase migration for all nine tables, their documented constraints and indexes, plus RLS. RLS role checks use narrowly scoped `SECURITY DEFINER` helpers in the private schema to avoid recursive policy lookups; no triggers were introduced.
  2026-08-18 — Phase 1 uses the authenticated user's cookie-backed Supabase session for login, profile lookup and RLS. The protected layout verifies JWT claims, then reads public.users; it rejects missing or inactive profiles. The service role client is intentionally deferred until an Admin-only user-management endpoint exists.
+- 2026-10-17 — Phase 2 configures the singleton parking lot through the additive `configure_parking_lot` SQL RPC. It atomically creates the lot, its row-by-column spots and an audit entry; later updates can change name/address but cannot change grid dimensions, preventing orphaned or remapped historical sessions.
 
 ## 🐛 Known Issues & Quirks
 *(Log current bugs or weird workarounds here)*
@@ -32,5 +33,5 @@ DO NOT delete historical context if it is still relevant. Compress older complet
 - [x] Research — COMPLETED (`research-Parking-Management.md`)
 - [x] PRD — COMPLETED (`PRD-Parking-Management-MVP.md`)
 - [x] Technical Design — COMPLETED (`TechDesign-Parking-Management-MVP.md`)
-- [ ] Agent Documentation — CURRENT PHASE (this file and its siblings)
-- [ ] Build — NOT STARTED (next: Phase 0 — Project Setup, see AGENTS.md Roadmap)
+- [x] Agent Documentation — COMPLETED
+- [ ] Build — IN PROGRESS (Phases 0–2 completed; next: Phase 3 — Rates)

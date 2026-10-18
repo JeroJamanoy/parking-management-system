@@ -70,18 +70,18 @@ Do NOT modify these without explicit human approval:
 - **Concurrency discipline:** any new endpoint touching `parking_sessions` or `parking_spots` must be checked against the integrity rules in `agent_docs/code_patterns.md` before merging.
 
 ## Current State 📍
-**Last Updated:** 2026-08-18
-**Working On:** Phase 1 — Auth & roles. Login/logout, session refresh, protected layout and the pure authorization matrix are implemented locally.
-**Recently Completed:** Initial schema was applied to the remote Supabase project; an initial Admin Auth user and matching public.users profile exist.
-**Blocked By:** Manual verification of the real Admin login is still required. An Operator test account is needed to execute the role-denial checks.
+**Last Updated:** 2026-10-17
+**Working On:** Phase 2 — Parking configuration. The Admin can configure a singleton parking lot at `/spots`; the grid is rendered for active staff.
+**Recently Completed:** Migration `20261017044304_configure_parking_lot.sql` was applied. Its `security invoker` RPC atomically creates the lot, generated spots and audit record while preserving RLS. The grid dimensions are intentionally immutable after initial creation.
+**Blocked By:** An Operator test account is needed to complete the Phase 2 role-denial check.
 
 ## Roadmap 🗺️
 *(Numbered phases below map directly to the Implementation Plan, section 22 of `TechDesign-Parking-Management-MVP.md`.)*
 
 ### Phase 1: Foundation
-- [ ] Phase 0 — Project setup: repo, Next.js, Supabase project + CLI + initial migrations, env vars, basic CI
-- [ ] Phase 1 — Auth & roles: `users` table, Supabase Auth integration, protected-route middleware, base authorization matrix
-- [ ] Phase 2 — Parking configuration: `parking_lots`, `parking_spots`, grid generation, basic RLS
+- [x] Phase 0 — Project setup: repo, Next.js, Supabase project + CLI + initial migrations, env vars, basic CI
+- [x] Phase 1 — Auth & roles: `users` table, Supabase Auth integration, protected-route middleware, base authorization matrix
+- [x] Phase 2 — Parking configuration: `parking_lots`, `parking_spots`, grid generation, basic RLS
 
 ### Phase 2: Core Features
 - [ ] Phase 3 — Rates: `rates` table, configuration endpoint, "one active rate per vehicle type" logic
